@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#130d45">
+  <meta name="description" content="Johnny Builds to Mars — a playful interactive reading adventure for kids.">
+  <title>Johnny Builds to Mars</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <main class="book" id="book" aria-live="polite">
+    <header class="topbar">
+      <button class="round-button sound-button" id="soundButton" type="button" aria-pressed="true" aria-label="Turn sound off">♪</button>
+      <div class="chapter-dots" id="chapterDots" aria-label="Story progress"></div>
+      <button class="round-button help-button" id="helpButton" type="button" aria-label="Show page instructions">?</button>
+    </header>
+
+    <section class="page cover-page active" data-page="0" aria-labelledby="cover-title">
+      <div class="solar-system" aria-hidden="true">
+        <div class="orbit orbit-1"><span class="planet mercury">Mercury</span></div>
+        <div class="orbit orbit-2"><span class="planet venus">Venus</span></div>
+        <div class="orbit orbit-3"><span class="planet earth">Earth</span></div>
+        <div class="orbit orbit-4"><span class="planet mars">Mars</span></div>
+        <div class="sun">SUN</div>
+      </div>
+      <div class="cover-copy paper-card">
+        <p class="eyebrow">A make-it-yourself adventure</p>
+        <h1 id="cover-title">Johnny<br><span>Builds to Mars</span></h1>
+        <p class="cover-intro">Johnny has a cardboard box, a wild idea, and exactly zero grown-ups going with him.</p>
+        <button class="big-button start-button" id="startStoryButton" type="button">MY COVER IS READY <span>→</span></button>
+      </div>
+      <div class="cover-maker" aria-label="Make your book cover">
+        <p class="cover-maker-title">DRESS JOHNNY</p>
+        <div class="cover-characters">
+          <div class="cover-johnny outfit-space" id="coverJohnny" aria-label="Johnny wearing a space suit"><span class="cover-hat">★</span><span class="cover-face">⌁</span><span class="cover-shirt"></span></div>
+          <div class="cover-dog" aria-label="Johnny's pet dog">🐶<span id="dogNameTag">COMET</span></div>
+        </div>
+        <div class="outfit-picker" aria-label="Choose Johnny's outfit">
+          <button class="outfit-choice selected" data-outfit="space" type="button">🚀 Space</button>
+          <button class="outfit-choice" data-outfit="hero" type="button">🦸 Hero</button>
+          <button class="outfit-choice" data-outfit="pajamas" type="button">🌙 PJs</button>
+        </div>
+        <label class="dog-name-label" for="dogName">NAME HIS PET DOG</label>
+        <input id="dogName" class="dog-name-input" maxlength="12" value="Comet" autocomplete="off" aria-label="Name Johnny's pet dog">
+      </div>
+      <p class="read-note">Best read with sound on 🔊</p>
+      <div class="look-up-scene" id="lookUpScene" aria-hidden="true">
+        <div class="night-window">
+          <span class="window-star s1">✦</span><span class="window-star s2">·</span><span class="window-star s3">✧</span>
+          <button class="window-mars" id="windowMars" type="button" aria-label="Tap Mars">MARS</button>
+        </div>
+        <div class="look-johnny" aria-hidden="true"><span class="johnny-head">⌁</span><span class="johnny-body"></span></div>
+        <div class="look-copy paper-card">
+          <p class="page-kicker">ONE STARRY NIGHT...</p>
+          <h2>Johnny looked up</h2>
+          <p>High above the rooftops, a rusty-red dot winked in the sky. “Mars!” Johnny whispered. “I’m going there.”</p>
+          <p class="instruction">Tap Mars to begin the adventure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page build-page" data-page="1" aria-labelledby="build-title">
+      <div class="story-copy paper-card small-card">
+        <p class="page-kicker">PAGE ONE</p>
+        <h2 id="build-title">A box with a plan</h2>
+        <p>Johnny found the biggest box in the garage. “Will you help me turn this wobbly old thing into a rocket?”</p>
+        <p class="instruction" data-help>Trace every dotted rocket part. Then tap the parts to build your rocket.</p>
+      </div>
+      <div class="workbench">
+        <div class="trace-stage" id="traceStage">
+          <div class="trace-heading"><b id="traceLabel">1. TRACE THE NOSE</b><span id="traceProgress">PART 1 / 5</span></div>
+          <canvas id="traceCanvas" width="420" height="360" aria-label="Trace the dotted rocket part"></canvas>
+          <div class="trace-tools" aria-label="Drawing colors">
+            <button class="trace-color selected" data-trace-color="#ef3e4a" style="--swatch:#ef3e4a" aria-label="Red"></button>
+            <button class="trace-color" data-trace-color="#2d83de" style="--swatch:#2d83de" aria-label="Blue"></button>
+            <button class="trace-color" data-trace-color="#35b66c" style="--swatch:#35b66c" aria-label="Green"></button>
+            <button class="trace-color" data-trace-color="#ffd64e" style="--swatch:#ffd64e" aria-label="Yellow"></button>
+          </div>
+          <p>Follow the dots—your crayon marks become the real rocket part!</p>
+          <button class="trace-done" id="traceDone" type="button" disabled>PART READY! ✂</button>
+        </div>
+        <div class="rocket-blueprint waiting" id="rocketBlueprint">
+          <div class="drop-slot slot-tip" data-accept="tip" aria-label="Rocket nose spot"></div>
+          <div class="drop-slot slot-body" data-accept="body" aria-label="Rocket body spot"></div>
+          <div class="drop-slot slot-window" data-accept="window" aria-label="Rocket window spot"></div>
+          <div class="drop-slot slot-fin-left" data-accept="fin-left" aria-label="Left fin spot"></div>
+          <div class="drop-slot slot-fin-right" data-accept="fin-right" aria-label="Right fin spot"></div>
+        </div>
+        <div class="parts-tray waiting" id="partsTray" aria-label="Rocket parts">
+          <button class="rocket-part part-tip locked-part" draggable="false" data-part="tip" aria-label="Rocket nose"></button>
+          <button class="rocket-part part-body locked-part" draggable="false" data-part="body" aria-label="Rocket body"></button>
+          <button class="rocket-part part-window locked-part" draggable="false" data-part="window" aria-label="Rocket window">J</button>
+          <button class="rocket-part part-fin-left locked-part" draggable="false" data-part="fin-left" aria-label="Left rocket fin"></button>
+          <button class="rocket-part part-fin-right locked-part" draggable="false" data-part="fin-right" aria-label="Right rocket fin"></button>
+        </div>
+        <div class="johnny" aria-label="Johnny"><span class="johnny-head">⌁</span><span class="johnny-body"></span><span class="speech">That fits!</span></div>
+      </div>
+      <div class="success-note" id="buildSuccess">ROCKET BUILT! ✓</div>
+    </section>
+
+    <section class="page decorate-page" data-page="2" aria-labelledby="decorate-title">
+      <div class="story-copy paper-card small-card">
+        <p class="page-kicker">PAGE TWO</p>
+        <h2 id="decorate-title">Every rocket needs style</h2>
+        <p>“Plain cardboard?” Johnny gasped. “Not on my mission!”</p>
+        <p class="instruction" data-help>Pick a crayon and draw on the rocket. Add stickers too!</p>
+      </div>
+      <div class="art-table">
+        <canvas id="rocketCanvas" width="420" height="520" aria-label="Draw decorations on the rocket"></canvas>
+        <div class="crayon-box" aria-label="Crayon colors">
+          <button class="crayon red selected" data-color="#ed3f48" aria-label="Red crayon"></button>
+          <button class="crayon yellow" data-color="#ffd24a" aria-label="Yellow crayon"></button>
+          <button class="crayon blue" data-color="#2f7ddb" aria-label="Blue crayon"></button>
+          <button class="crayon green" data-color="#29a96b" aria-label="Green crayon"></button>
+          <button class="crayon black" data-color="#241c38" aria-label="Black crayon"></button>
+          <button class="eraser" id="clearCanvas" type="button">CLEAR</button>
+        </div>
+        <div class="sticker-strip" aria-label="Rocket stickers">
+          <button class="sticker" data-sticker="★">★</button><button class="sticker" data-sticker="⚡">⚡</button><button class="sticker" data-sticker="☻">☻</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page pack-page" data-page="3" aria-labelledby="pack-title">
+      <div class="story-copy paper-card small-card">
+        <p class="page-kicker">PAGE THREE</p>
+        <h2 id="pack-title">Pick three!</h2>
+        <p id="packStory">Johnny made a pile of very important space stuff. The rocket only has room for three things!</p>
+        <p class="instruction" id="packInstruction" data-help>Pick exactly 3 things. Tap one again to put it back. Then tape the box.</p>
+      </div>
+      <div class="packing-scene">
+        <div class="choice-pile" id="choicePile" tabindex="0" aria-label="Things Johnny could pack. Scroll down to see every choice.">
+          <button class="pile-item" data-pack-item="teddy bear" data-icon="🧸" type="button"><span>🧸</span>Teddy bear</button>
+          <button class="pile-item" data-pack-item="peanut butter" data-icon="🫙" type="button"><span>🫙</span>Peanut butter</button>
+          <button class="pile-item" data-pack-item="fork" data-icon="🍴" type="button"><span>🍴</span>Fork</button>
+          <button class="pile-item" data-pack-item="book" data-icon="📕" type="button"><span>📕</span>Book</button>
+          <button class="pile-item" data-pack-item="backpack" data-icon="🎒" type="button"><span>🎒</span>Backpack</button>
+          <button class="pile-item" data-pack-item="Nintendo Switch" data-icon="🎮" type="button"><span>🎮</span>Nintendo Switch</button>
+        </div>
+        <div class="box-packing show" id="boxPacking">
+          <div class="cardboard-box" id="cardboardBox" aria-label="Cardboard packing box">
+            <span class="box-label">3 MARS THINGS</span>
+            <div class="box-contents" id="boxContents"></div>
+            <div class="box-flap flap-left"></div><div class="box-flap flap-right"></div>
+            <div class="tape-strip"></div>
+          </div>
+          <button class="tape-button" id="tapeButton" type="button" disabled>🟨 TAPE UP THE BOX!</button>
+        </div>
+        <div class="pick-counter" id="pickCounter">PICKED: 0 / 3</div>
+      </div>
+      <div class="success-note" id="packSuccess">3 THINGS PACKED &amp; TAPED! ✓</div>
+    </section>
+
+    <section class="page launch-page" data-page="4" aria-labelledby="launch-title">
+      <div class="launch-sky" aria-hidden="true"></div>
+      <div class="story-copy paper-card launch-copy">
+        <p class="page-kicker">PAGE FOUR</p>
+        <h2 id="launch-title">Three... two... one...</h2>
+        <p>Johnny buckled in. “Babysitter, pull the BIG RED LEVER!”</p>
+        <p class="instruction" data-help>Pull the red lever down to blast off.</p>
+      </div>
+      <div class="launchpad">
+        <div class="launch-rocket" id="launchRocket" aria-hidden="true"><img id="launchRocketImage" alt=""></div>
+        <button class="lever" id="launchLever" type="button" aria-label="Pull launch lever"><span class="lever-stick"></span><span class="lever-ball"></span><b>PULL!</b></button>
+      </div>
+      <div class="kaboom" id="kaboom" aria-live="assertive">KA-BOOOOM!</div>
+    </section>
+
+    <section class="page space-page" data-page="5" aria-labelledby="space-title">
+      <div class="story-copy paper-card small-card dark-card">
+        <p class="page-kicker">PAGE FIVE</p>
+        <h2 id="space-title">Wiggle through space</h2>
+        <p>Past Mercury. Past Venus. Past the Moon. “Asteroids ahead!” Johnny squeaked.</p>
+        <p class="instruction" data-help>Tap every asteroid to clear a path to Mars.</p>
+      </div>
+      <div class="space-route">
+        <div class="mini-earth">EARTH</div>
+        <div class="flight-path"></div>
+        <div class="flying-rocket"><img id="flyingRocketImage" alt="Your rocket flying through space"></div>
+        <button class="asteroid a1" aria-label="Move asteroid">✹</button>
+        <button class="asteroid a2" aria-label="Move asteroid">✹</button>
+        <button class="asteroid a3" aria-label="Move asteroid">✹</button>
+        <button class="asteroid a4" aria-label="Move asteroid">✹</button>
+        <div class="big-mars">MARS</div>
+      </div>
+      <div class="success-note" id="spaceSuccess">PATH CLEAR! → MARS</div>
+    </section>
+
+    <section class="page mars-page" data-page="6" aria-labelledby="mars-title">
+      <div class="story-copy paper-card small-card">
+        <p class="page-kicker">PAGE SIX</p>
+        <h2 id="mars-title">Red dust, blue stars</h2>
+        <p>On Mars, everything crunched. Johnny spotted three sparkly rocks. “One for each pocket!”</p>
+        <p class="instruction" data-help>Find and tap the three blue space rocks.</p>
+      </div>
+      <div class="mars-ground">
+        <div class="mars-hills"></div>
+        <button class="space-rock r1" aria-label="Collect space rock">◆</button>
+        <button class="space-rock r2" aria-label="Collect space rock">◆</button>
+        <button class="space-rock r3" aria-label="Collect space rock">◆</button>
+        <div class="martian">⌁<span>hello?</span></div>
+        <div class="johnny mars-johnny"><span class="johnny-head">⌁</span><span class="johnny-body"></span></div>
+        <div class="rock-counter" id="rockCounter">ROCKS: 0 / 3</div>
+      </div>
+    </section>
+
+    <section class="page home-page" data-page="7" aria-labelledby="home-title">
+      <div class="confetti" aria-hidden="true"></div>
+      <div class="story-copy paper-card ending-card">
+        <p class="page-kicker">THE END... ALMOST</p>
+        <h2 id="home-title">Home before snack time</h2>
+        <p>The rocket thumped into the backyard. Johnny grinned. “Mars was great—but the best orange treasure is in the kitchen.”</p>
+        <p class="instruction" data-help>Open the cupboard for a crunchy surprise.</p>
+      </div>
+      <div class="kitchen">
+        <div class="cupboard">
+          <div class="cheetos"><b>CHEETOS</b><span>CRUNCH!</span></div>
+          <button class="cupboard-door left-door" aria-label="Open left cupboard door"></button>
+          <button class="cupboard-door right-door" aria-label="Open right cupboard door"></button>
+        </div>
+        <div class="home-johnny">☺<span>WE DID IT!</span></div>
+      </div>
+    </section>
+
+    <section class="page end-page" data-page="8" aria-labelledby="end-title">
+      <div class="end-stars" aria-hidden="true">✦ &nbsp; ★ &nbsp; ✧</div>
+      <div class="paper-card end-card">
+        <p class="page-kicker">MISSION COMPLETE</p>
+        <h2 id="end-title">THE END</h2>
+        <p>Johnny made it to Mars and all the way home—with every snack crumb accounted for.</p>
+        <p class="restart-question">Would you like to start the story again?</p>
+        <button class="big-button replay-button show" id="replayButton" type="button">START THE STORY AGAIN ↻</button>
+      </div>
+    </section>
+
+    <nav class="page-nav" aria-label="Story pages">
+      <button class="nav-arrow back-arrow" id="backButton" type="button" aria-label="Previous page">←</button>
+      <span class="page-number" id="pageNumber">COVER</span>
+      <button class="nav-arrow next-arrow" id="nextButton" type="button" aria-label="Next page">→</button>
+    </nav>
+    <div class="locked-message" id="lockedMessage" role="status" aria-live="polite">Finish this page before turning it!</div>
+  </main>
+
+  <dialog id="helpDialog">
+    <button id="closeHelp" aria-label="Close help">×</button>
+    <h2>Need a hint?</h2>
+    <p id="helpText">Use the big arrows to turn the pages.</p>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
